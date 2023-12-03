@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
+import java.util.Date;
 import java.util.List;
 
 public class JwtUtils {
@@ -22,6 +23,7 @@ public class JwtUtils {
     public static String createToken(String... data) {
         return JWT.create()
                 .withAudience(data)
+                .withIssuedAt(new Date(System.currentTimeMillis()))
                 .sign(SECRET);
     }
 

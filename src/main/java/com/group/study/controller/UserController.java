@@ -15,12 +15,13 @@ import com.group.study.utils.JwtUtils;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
 @RestController
-public class LoginController {
+public class UserController {
 
     @Resource
     private LoginService loginService;
@@ -59,5 +60,10 @@ public class LoginController {
     public BaseResponse<String> register(@Valid @RequestBody RegisterRequest request) {
         registerService.register(UserStructMapper.MAPPER.from(request), request.getRoleId());
         return ResultUtils.success("注册成功");
+    }
+
+    @RequestMapping("/test")
+    public BaseResponse<String> checkLogin() {
+        return ResultUtils.success("成功");
     }
 }

@@ -1,7 +1,6 @@
 package com.group.study.service.security;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import com.alibaba.fastjson.JSON;
 import com.group.study.common.state.StatusCode;
 import com.group.study.exception.BusinessException;
 import com.group.study.model.entity.User;
@@ -33,7 +32,7 @@ public class LoginService {
         //账号密码正确 创建token并将userId放入token
         String token = JwtUtils.createToken(dbUser.getUserId());
         //将新的token放入redis
-        RedisUtils.add(token, JSON.toJSONString(dbUser));
+        RedisUtils.add(dbUser.getUserId(), token);
         return token;
     }
 
@@ -48,8 +47,8 @@ public class LoginService {
         if (!CharSequenceUtil.isBlank(token) && JwtUtils.verifyToken(token)) {
             //在Redis中查询JWT与用户身份是否正确
             String userId = JwtUtils.getTokenAud(token).get(0);
-            User redisUser = JSON.parseObject(RedisUtils.getStr(token), User.class);
-            flag = userId.equals(redisUser.getUserId());
+            String redisToken = RedisUtils.getStr(userId);
+            flag = token.equals(redisToken);
         }
         return flag;
     }
