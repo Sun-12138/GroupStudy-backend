@@ -1,11 +1,17 @@
 package com.group.study.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author EDY
@@ -14,14 +20,16 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean(name = "redisTemplate")
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String,String> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
+    public <K, V> RedisTemplate<K, V> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+        RedisTemplate<K, V> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+        redisTemplate.setEnableTransactionSupport(true);
+        // 开启获取连接的校验
+        lettuceConnectionFactory.setValidateConnection(true);
         //设置序列化Key的实例化对象
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         //设置序列化Value的实例化对象
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;

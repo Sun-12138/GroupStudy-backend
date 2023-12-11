@@ -23,15 +23,15 @@ public class RegisterService {
      * @param roleId 角色id
      */
     public void register(User user, String roleId) {
-        String newUserId;
         //生成一个sys_user表中不存在的UUID
-        for (int i = 0; i < 5; i++) {
-            newUserId = UUID.randomUUID().toString();
+        int maxNumber = 5;
+        for (int i = 0; i < maxNumber; i++) {
+            String newUserId = UUID.randomUUID().toString();
             if (userService.getUserByUserId(newUserId) == null) {
                 user.setUserId(newUserId);
                 break;
             }
-            if (i == 4) {
+            if (i == maxNumber - 1) {
                 //运气不好 随机不到唯一UUID
                 throw new BusinessException(StatusCode.SYSTEM_ERROR, "注册失败");
             }

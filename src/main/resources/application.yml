@@ -1,4 +1,4 @@
-host: 203.189.217.59
+host: 8.134.78.145
 # mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*.xml

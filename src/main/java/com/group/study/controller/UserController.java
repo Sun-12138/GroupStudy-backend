@@ -1,8 +1,11 @@
 package com.group.study.controller;
 
+import cn.hutool.core.lang.Validator;
 import com.group.study.annotation.PassToken;
 import com.group.study.common.BaseResponse;
 import com.group.study.common.ResultUtils;
+import com.group.study.common.state.StatusCode;
+import com.group.study.exception.BusinessException;
 import com.group.study.model.dto.request.LoginRequest;
 import com.group.study.model.dto.request.RegisterRequest;
 import com.group.study.model.dto.response.LoginResponse;
@@ -41,6 +44,10 @@ public class UserController {
     @PassToken
     @PostMapping("/login")
     public BaseResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        //检查手机号是否正确格式
+        if (!Validator.isNumber(request.getTelephone())) {
+            throw new BusinessException(StatusCode.PARAMS_ERROR, "手机号格式错误");
+        }
         //获取token
         String token = loginService.login(request.getTelephone(), request.getPassword());
         //获取用户角色
@@ -62,6 +69,11 @@ public class UserController {
         return ResultUtils.success("注册成功");
     }
 
+    /**
+     * 检查登录状态
+     *
+     * @return 登录成功
+     */
     @RequestMapping("/test")
     public BaseResponse<String> checkLogin() {
         return ResultUtils.success("成功");

@@ -6,12 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
 @Data
+@ToString(exclude={"id"})
 @TableName("sys_role")
 public class Role {
 
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    @EqualsAndHashCode.Exclude
     @TableId(type = IdType.AUTO)
     private Integer id;
     /**

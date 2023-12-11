@@ -9,6 +9,7 @@ import lombok.*;
 import java.sql.Timestamp;
 
 @Data
+@ToString(exclude={"id"})
 @TableName("sys_user")
 public class User {
 
@@ -17,7 +18,6 @@ public class User {
      */
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    @EqualsAndHashCode.Exclude
     @TableId(type = IdType.AUTO)
     private Integer id;
 

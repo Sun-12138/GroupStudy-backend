@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -19,10 +20,18 @@ public enum Sex implements Serializable {
     WOMAN(1, "女"),
     UNKNOWN(-1, "未知");
 
+    /**
+     * 性别在数据库中的字段id
+     */
     @TableId
     @EnumValue
+    @ApiModelProperty("性别id")
     private final Integer id;
 
+    /**
+     * 性别名
+     */
+    @ApiModelProperty("性别名称")
     private final String sexName;
 
     Sex(Integer id, String sexName) {

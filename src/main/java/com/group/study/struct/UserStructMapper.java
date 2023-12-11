@@ -1,9 +1,12 @@
 package com.group.study.struct;
 
 import com.group.study.model.dto.request.RegisterRequest;
+import com.group.study.model.dto.response.ClassMemberResponse;
 import com.group.study.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * 该 @Mapper为Mapstruct的Mapper
@@ -20,4 +23,6 @@ public interface UserStructMapper {
      * @return 用户实体对象
      */
     User from(RegisterRequest request);
+
+    List<ClassMemberResponse.Member> from(List<User> user);
 }

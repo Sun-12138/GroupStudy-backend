@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Objects;
 
+/**
+ * 与用户有关的业务代码
+ */
 @Service
 public class UserService {
     @Resource
