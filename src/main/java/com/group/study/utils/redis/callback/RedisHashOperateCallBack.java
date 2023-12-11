@@ -20,5 +20,5 @@ public interface RedisHashOperateCallBack<K, V> extends IRedisOperateCallBack<K,
      * @param execute Redis操作对象
      * @param group   该key所在分组
      */
-    V[] operate(OperateKV<K, V> kv, HashOperations<Object, Object, Object> execute, RedisKeyGroup group);
+    V[] operate(OperateKV<K, V> kv, HashOperations<Object, Object, Object> execute, RedisKeyGroup<K> group);
 }

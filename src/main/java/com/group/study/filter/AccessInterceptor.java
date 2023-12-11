@@ -3,7 +3,6 @@ package com.group.study.filter;
 import com.group.study.annotation.Access;
 import com.group.study.common.state.StatusCode;
 import com.group.study.context.UserContextHolder;
-import com.group.study.context.UserContextInfo;
 import com.group.study.exception.BusinessException;
 import com.group.study.model.entity.Role;
 import com.group.study.model.enums.AccessRole;

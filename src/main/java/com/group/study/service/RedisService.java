@@ -1,7 +1,6 @@
 package com.group.study.service;
 
 import com.group.study.utils.redis.operate.RedisValueOperate;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
