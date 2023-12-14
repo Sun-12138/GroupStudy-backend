@@ -32,7 +32,7 @@ public class ClassService {
      */
     public void createClass(String className) {
         //查询班级名为 className 的班级对象
-        Class dbClass = this.getUserOwnerClass(className);
+        Class dbClass = this.getClassByName(className);
         if (dbClass != null) {
             throw new BusinessException(StatusCode.PARAMS_ERROR, "当前班级名已存在");
         }
@@ -67,7 +67,7 @@ public class ClassService {
      * @param className 班级名
      * @return 班级对象
      */
-    public Class getUserOwnerClass(String className) {
+    public Class getClassByName(String className) {
         //获得当前用户id
         String userId = UserContextHolder.getContext().getUserId();
         QueryWrapper<Class> qw = new QueryWrapper<>();
@@ -86,6 +86,19 @@ public class ClassService {
         QueryWrapper<Class> qw = new QueryWrapper<>();
         qw.eq("class_id", classId);
         return classMapper.selectOne(qw);
+    }
+
+    /**
+     * 获得当前用户所有班级
+     *
+     * @return 当前用户班级列表
+     */
+    public List<Class> getAllClass() {
+        //当前用户id
+        String userId = UserContextHolder.getContext().getUserId();
+        QueryWrapper<Class> qw = new QueryWrapper<>();
+        qw.eq("user_id", userId);
+        return classMapper.selectList(qw);
     }
 
     /**

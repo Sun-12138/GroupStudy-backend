@@ -21,7 +21,7 @@ public class InviteCodeController {
      * 创建班级邀请码
      */
     @Access({AccessRole.Teacher})
-    @GetMapping("/class/invite/code")
+    @PostMapping("/class/invite/code")
     public BaseResponse<String> createJoinUrl(@Valid @RequestBody InviteCodeRequest request) {
         //生成班级邀请码
         String inviteCode = inviteCodeService.createInviteCode(request.getClassId(), request.getExpires());

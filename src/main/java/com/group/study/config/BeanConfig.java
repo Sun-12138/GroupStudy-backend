@@ -48,16 +48,16 @@ public class BeanConfig {
             //过期时间
             long timeout = kv.getTimeout();
             TimeUnit unit = kv.getUnit();
-            Boolean insertStatus;
+//            Boolean insertStatus;
             if (timeout != -1L) {
-                insertStatus = execute.setIfAbsent(key, kv.getValue(), timeout, unit);
+                execute.set(key, kv.getValue(), timeout, unit);
             } else {
-                insertStatus = execute.setIfAbsent(key, kv.getValue());
+                 execute.set(key, kv.getValue());
             }
 
-            if (Boolean.FALSE.equals(insertStatus)) {
-                throw new RedisException(key + "已存在");
-            }
+//            if (Boolean.FALSE.equals(insertStatus)) {
+//                throw new RedisException(key + "已存在");
+//            }
             return null;
         });
         operate.addGroup("invite");

@@ -7,10 +7,12 @@ import com.group.study.common.ResultUtils;
 import com.group.study.common.state.StatusCode;
 import com.group.study.exception.BusinessException;
 import com.group.study.model.dto.response.ClassMemberResponse;
+import com.group.study.model.entity.Class;
 import com.group.study.model.entity.User;
 import com.group.study.model.enums.AccessRole;
 import com.group.study.service.ClassService;
 import com.group.study.struct.UserStructMapper;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,16 +35,27 @@ public class ClassController {
      */
     @Access({AccessRole.Teacher})
     @PostMapping("/class/add")
-    public BaseResponse<String> createClass(String className) {
+    public BaseResponse<String> createClass(@NotBlank(message = "班级名不能为空") String className) {
         classService.createClass(className);
         return ResultUtils.success("班级:" + className + "注册成功");
     }
 
     /**
+     * 获取当前用户所有班级
+     *
+     * @return 班级列表
+     */
+    @GetMapping("/class/all")
+    public BaseResponse<List<Class>> getUserClassList() {
+        return ResultUtils.success(classService.getAllClass());
+    }
+
+    /**
      * 获得班级成员列表
      */
-    @GetMapping("/class/member/{classId}/{pageNum}")
-    public BaseResponse<ClassMemberResponse> getClassMember(@PathVariable int pageNum, @PathVariable String classId, int pageSize) {
+    @Access({AccessRole.Teacher})
+    @GetMapping("/class/member")
+    public BaseResponse<ClassMemberResponse> getClassMember(int pageNum, String classId, int pageSize) {
         //检查当前用户是否为的当前的班级成员或创建者
         if (!classService.checkUserIsClassOwnerOrMember(classId)) {
             throw new BusinessException(StatusCode.NO_AUTH_ERROR);

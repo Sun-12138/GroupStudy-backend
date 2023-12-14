@@ -16,6 +16,7 @@ import com.group.study.service.security.RegisterService;
 import com.group.study.struct.UserStructMapper;
 import com.group.study.utils.JwtUtils;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

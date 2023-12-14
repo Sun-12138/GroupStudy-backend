@@ -4,11 +4,13 @@ import com.group.study.model.enums.Sex;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
 
 @Getter
+@ToString
 public class RegisterRequest implements Serializable {
 
     /**

@@ -70,7 +70,7 @@ public class InviteCodeService {
      * @param inviteCode 邀请码
      */
     public void joinClassByInviteCode(String classId, String inviteCode) {
-        if (!checkInviteCodeEffective(classId, inviteCode)) throw new BusinessException(StatusCode.NO_AUTH_ERROR);
+        if (!checkInviteCodeEffective(classId, inviteCode)) throw new BusinessException(StatusCode.NO_AUTH_ERROR, "邀请码错误或者过期");
         //判断是否已加入班级
         if (classService.checkUserIsClassOwnerOrMember(classId)) {
             //当前用户可能为班级所有者或者成员
