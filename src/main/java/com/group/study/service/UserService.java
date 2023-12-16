@@ -3,6 +3,7 @@ package com.group.study.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.group.study.common.state.StatusCode;
 import com.group.study.exception.BusinessException;
+import com.group.study.mapper.RoleMapper;
 import com.group.study.mapper.UserMapper;
 import com.group.study.model.entity.Role;
 import com.group.study.model.entity.User;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,6 +21,9 @@ import java.util.Objects;
 public class UserService {
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RoleMapper roleMapper;
 
     /**
      * 查询用户信息
@@ -76,6 +81,17 @@ public class UserService {
      */
     public Role getRoleByUserId(String userId) {
         return userMapper.getUserRole(userId);
+    }
+
+    /**
+     * 获得全部角色
+     *
+     * @return 角色列表
+     */
+    public List<Role> getAllRole() {
+        QueryWrapper<Role> qw = new QueryWrapper<>();
+        qw.eq("is_deleted", 0);
+        return roleMapper.selectList(qw);
     }
 
     /**

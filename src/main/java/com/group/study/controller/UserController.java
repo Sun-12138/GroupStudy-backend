@@ -11,27 +11,21 @@ import com.group.study.model.dto.request.RegisterRequest;
 import com.group.study.model.dto.response.LoginResponse;
 import com.group.study.model.entity.Role;
 import com.group.study.service.UserService;
-import com.group.study.service.security.LoginService;
-import com.group.study.service.security.RegisterService;
+import com.group.study.service.security.AccountService;
 import com.group.study.struct.UserStructMapper;
 import com.group.study.utils.JwtUtils;
 import jakarta.validation.Valid;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 public class UserController {
 
     @Resource
-    private LoginService loginService;
+    private AccountService accountService;
 
-    @Resource
-    private RegisterService registerService;
 
     @Resource
     private UserService userService;
@@ -50,7 +44,7 @@ public class UserController {
             throw new BusinessException(StatusCode.PARAMS_ERROR, "手机号格式错误");
         }
         //获取token
-        String token = loginService.login(request.getTelephone(), request.getPassword());
+        String token = accountService.login(request.getTelephone(), request.getPassword());
         //获取用户角色
         String userId = JwtUtils.getTokenAud(token).get(0);
         Role userRole = userService.getRoleByUserId(userId);
@@ -66,8 +60,17 @@ public class UserController {
     @PassToken
     @PostMapping("/register")
     public BaseResponse<String> register(@Valid @RequestBody RegisterRequest request) {
-        registerService.register(UserStructMapper.MAPPER.from(request), request.getRoleId());
+        accountService.register(UserStructMapper.MAPPER.from(request), request.getRoleId());
         return ResultUtils.success("注册成功");
+    }
+
+    /**
+     * 获得角色列表
+     */
+    @PassToken
+    @GetMapping("/role/list")
+    public BaseResponse<List<Role>> roleList() {
+        return ResultUtils.success(userService.getAllRole());
     }
 
     /**

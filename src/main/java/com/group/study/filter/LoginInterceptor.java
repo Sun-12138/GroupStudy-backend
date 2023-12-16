@@ -6,7 +6,7 @@ import com.group.study.context.UserContextHolder;
 import com.group.study.exception.BusinessException;
 import com.group.study.model.entity.Role;
 import com.group.study.service.UserService;
-import com.group.study.service.security.LoginService;
+import com.group.study.service.security.AccountService;
 import com.group.study.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Resource
-    private LoginService loginService;
+    private AccountService accountService;
 
     @Resource
     private UserService userService;
@@ -35,7 +35,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         //检查token登录状态
         String token = request.getHeader("Authorization");
-        if (!loginService.checkToken(token)) throw new BusinessException(StatusCode.NO_LOGIN_ERROR);
+        if (!accountService.checkToken(token)) throw new BusinessException(StatusCode.NO_LOGIN_ERROR);
         String userId = JwtUtils.getTokenAud(token).get(0);
         Role role = userService.getRoleByUserId(userId);
         //设置用户上下文信息
