@@ -5,11 +5,14 @@ import com.group.study.annotation.PassToken;
 import com.group.study.common.BaseResponse;
 import com.group.study.common.ResultUtils;
 import com.group.study.common.state.StatusCode;
+import com.group.study.context.UserContextHolder;
 import com.group.study.exception.BusinessException;
 import com.group.study.model.dto.request.LoginRequest;
 import com.group.study.model.dto.request.RegisterRequest;
 import com.group.study.model.dto.response.LoginResponse;
+import com.group.study.model.dto.response.UserInfoResponse;
 import com.group.study.model.entity.Role;
+import com.group.study.model.entity.User;
 import com.group.study.service.UserService;
 import com.group.study.service.security.AccountService;
 import com.group.study.struct.UserStructMapper;
@@ -71,6 +74,15 @@ public class UserController {
     @GetMapping("/role/list")
     public BaseResponse<List<Role>> roleList() {
         return ResultUtils.success(userService.getAllRole());
+    }
+
+    /**
+     * 获取用户信息
+     */
+    @GetMapping("/user/info")
+    public BaseResponse<UserInfoResponse> getUserInfo() {
+        User user = userService.getUserByUserId(UserContextHolder.getContext().getUserId(), false);
+        return ResultUtils.success(UserStructMapper.MAPPER.from(user));
     }
 
     /**

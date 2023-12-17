@@ -20,6 +20,9 @@ public interface ClassMapper extends BaseMapper<Class> {
     @Insert("INSERT INTO sys_user_class (class_id, user_id) VALUES (#{classId}, #{userId})")
     void addClassMember(String classId, String userId);
 
+    @Select("SELECT sys_class.* FROM sys_class, sys_user_class WHERE sys_user_class.user_id = #{userId} AND sys_user_class.class_id = sys_class.class_id")
+    List<Class> getAllClass(String userId);
+
     @Select("SELECT usr.user_id, usr.user_name, usr.sex, usr.telephone, usr.create_time, usr.update_time FROM sys_user_class cls, sys_user usr WHERE cls.class_id = #{classId} AND usr.user_id = cls.user_id")
     IPage<User> getClassMember(Page<User> page, String classId);
 }

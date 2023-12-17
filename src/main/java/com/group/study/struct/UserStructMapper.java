@@ -2,6 +2,7 @@ package com.group.study.struct;
 
 import com.group.study.model.dto.request.RegisterRequest;
 import com.group.study.model.dto.response.ClassMemberResponse;
+import com.group.study.model.dto.response.UserInfoResponse;
 import com.group.study.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -25,4 +26,6 @@ public interface UserStructMapper {
     User from(RegisterRequest request);
 
     List<ClassMemberResponse.Member> from(List<User> user);
+
+    UserInfoResponse from(User user);
 }

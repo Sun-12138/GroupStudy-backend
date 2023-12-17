@@ -43,6 +43,7 @@ public class UserService {
      * @return 查询到的用户信息
      */
     public User getUserByUserId(String userId, boolean isDeleted) {
+        System.out.println(userId);
         QueryWrapper<User> qw = new QueryWrapper<>();
         qw.eq("user_id", userId)
                 .eq("is_deleted", isDeleted);

@@ -88,17 +88,32 @@ public class ClassService {
         return classMapper.selectOne(qw);
     }
 
+    public List<Class> getJoinClass() {
+        return classMapper.getAllClass(UserContextHolder.getContext().getUserId());
+    }
+
+    /**
+     * 获得创建的班级列表
+     *
+     * @return 当前用户创建的班级列表
+     */
+    public List<Class> getOwnerClass() {
+        //当前用户id
+        String userId = UserContextHolder.getContext().getUserId();
+        QueryWrapper<Class> qw = new QueryWrapper<>();
+        qw.eq("user_id", userId);
+        return classMapper.selectList(qw);
+    }
+
     /**
      * 获得当前用户所有班级
      *
      * @return 当前用户班级列表
      */
     public List<Class> getAllClass() {
-        //当前用户id
-        String userId = UserContextHolder.getContext().getUserId();
-        QueryWrapper<Class> qw = new QueryWrapper<>();
-        qw.eq("user_id", userId);
-        return classMapper.selectList(qw);
+        List<Class> joinCLass = getJoinClass();
+        joinCLass.addAll(getOwnerClass());
+        return joinCLass;
     }
 
     /**
@@ -168,12 +183,20 @@ public class ClassService {
         return this.checkUserIsClassOwner(classId) || this.checkUserIsClassMember(classId);
     }
 
+//    /**
+//     * 检查userID是否为classId对应班级的成员
+//     */
+//    public boolean checkUserIdIsClassMember(String classId, String userId) {
+//        QueryWrapper<User> qw = new QueryWrapper<>();
+//        qw
+//    }
+
     /**
      * 分页方式查询成员
      *
-     * @param pageNum 页面页号
+     * @param pageNum  页面页号
      * @param pageSize 每页数据大小
-     * @param classId 班级id
+     * @param classId  班级id
      */
     public IPage<User> getClassMemberPage(int pageNum, int pageSize, String classId) {
         //数据库中的User数据
