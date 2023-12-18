@@ -1,0 +1,31 @@
+@startuml
+abstract AbstractRedisOperateParam<V> {
+    String key //Redis中的key
+    final V value //Redis中的value
+    final long timeout //Key的过期时间
+    final TimeUnidt unit //Key的过期时间单位
+    -AbstractRedisOperateParam(String key, V value, long timeout, TimeUnit unit) //构造方法
+    abstract class AbstractFactory
+    static final long DEFAULT_TIMEOUT = -1L //默认的过期时间
+    static final TimeUnit DEFAULT_TIMEOUT_UNIT = TimeUnit.SECONDS //默认的过期时间单位
+}
+
+class RedisValueOperateParam<V> {
+    RedisValueOperateParam(String key, V value, long timeout, TimeUnit unit) //构造方法
+}
+
+class RedisHashOperateParam<V> {
+    final String hKey //Hash中的key
+    RedisHashOperateParam(String key, String hKey, V value, long timeout, TimeUnit unit) //构造方法
+}
+
+class RedisOperateFactory {
+    +static <V> RedisValueOperateParam<V> create(String key)
+    +static <V> RedisValueOperateParam<V> create(String key, long timeout, TimeUnit unit)
+    +static <V> RedisValueOperateParam<V> create(String key, V value)
+    +static <V> RedisValueOperateParam<V> create(String key, V value, long timeout, TimeUnit unit)
+}
+
+RedisValueOperateParam ---> AbstractRedisOperateParam
+RedisHashOperateParam --> AbstractRedisOperateParam
+@enduml

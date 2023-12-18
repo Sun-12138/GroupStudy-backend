@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * key分组 用于定义redis key的层级
  */
-public class RedisKeyGroup<K> {
+public class RedisKeyGroup {
 
     /**
      * redis分组名列表
      */
-    private List<K> group;
+    private List<String> group;
 
     /**
      * 分祝符
@@ -24,7 +24,7 @@ public class RedisKeyGroup<K> {
         initSep();
     }
 
-    public RedisKeyGroup(List<K> group) {
+    public RedisKeyGroup(List<String> group) {
         initSep();
         this.group = group;
     }
@@ -33,7 +33,7 @@ public class RedisKeyGroup<K> {
         this.sep = sep.getSep();
     }
 
-    public RedisKeyGroup(List<K> group, Sep sep) {
+    public RedisKeyGroup(List<String> group, Sep sep) {
         this.sep = sep.getSep();
         this.group = group;
     }
@@ -58,7 +58,7 @@ public class RedisKeyGroup<K> {
      *
      * @param newGroup key的新组名
      */
-    public void addGroup(K newGroup) {
+    public void addGroup(String newGroup) {
         if (group == null) initGroup();
         group.add(newGroup);
     }
@@ -69,9 +69,9 @@ public class RedisKeyGroup<K> {
      *
      * @return key所在组前缀
      */
-    public Object generateGroup() {
+    public String generateGroup() {
         StringBuilder sb = new StringBuilder();
-        for (K group : this.group) {
+        for (String group : this.group) {
             sb.append(group).append(sep);
         }
         return sb.toString();

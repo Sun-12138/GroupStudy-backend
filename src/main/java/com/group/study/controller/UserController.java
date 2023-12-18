@@ -81,7 +81,7 @@ public class UserController {
      */
     @GetMapping("/user/info")
     public BaseResponse<UserInfoResponse> getUserInfo() {
-        User user = userService.getUserByUserId(UserContextHolder.getContext().getUserId(), false);
+        User user = userService.getUserByUserId(UserContextHolder.getContext().getUserId());
         return ResultUtils.success(UserStructMapper.MAPPER.from(user));
     }
 

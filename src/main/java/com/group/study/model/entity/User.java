@@ -55,9 +55,4 @@ public class User {
      * 账号信息最后修改时间
      */
     private Timestamp updateTime;
-
-    /**
-     * 是否删除
-     */
-    private Boolean isDeleted;
 }

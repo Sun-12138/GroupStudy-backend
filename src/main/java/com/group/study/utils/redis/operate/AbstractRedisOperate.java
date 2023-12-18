@@ -3,11 +3,11 @@ package com.group.study.utils.redis.operate;
 import com.group.study.utils.redis.callback.IRedisOperateCallBack;
 import org.springframework.data.redis.core.RedisTemplate;
 
-public abstract class AbstractRedisOperate<K, V> implements IRedisOperate<K, V>{
+public abstract class AbstractRedisOperate<V> implements IRedisOperate<V> {
     /**
      * key所在组
      */
-    RedisKeyGroup<K> group;
+    RedisKeyGroup group;
 
     /**
      * Redis操作执行者
@@ -17,13 +17,13 @@ public abstract class AbstractRedisOperate<K, V> implements IRedisOperate<K, V>{
     /**
      * Redis操作回调对象
      */
-    final IRedisOperateCallBack<K, V> callBack;
+    final IRedisOperateCallBack<V> callBack;
 
     /**
      * @param redisTemplate Redis操作执行者
      * @param callBack Redis操作回调对象
      */
-    public AbstractRedisOperate(RedisTemplate<Object, Object> redisTemplate, IRedisOperateCallBack<K, V> callBack) {
+    public AbstractRedisOperate(RedisTemplate<Object, Object> redisTemplate, IRedisOperateCallBack<V> callBack) {
         this.redisTemplate = redisTemplate;
         this.callBack = callBack;
     }
@@ -33,8 +33,8 @@ public abstract class AbstractRedisOperate<K, V> implements IRedisOperate<K, V>{
      *
      * @param newGroup key的新组名
      */
-    public void addGroup(K newGroup) {
-        if (group == null) group = new RedisKeyGroup<>();
+    public void addGroup(String newGroup) {
+        if (group == null) group = new RedisKeyGroup();
         group.addGroup(newGroup);
     }
 
@@ -43,10 +43,9 @@ public abstract class AbstractRedisOperate<K, V> implements IRedisOperate<K, V>{
      *
      * @param newGroup key的新组名
      */
-    @SafeVarargs
-    public final void addGroup(K... newGroup) {
-        if (group == null) group = new RedisKeyGroup<>();
-        for (K group : newGroup) {
+    public void addGroup(String... newGroup) {
+        if (group == null) group = new RedisKeyGroup();
+        for (String group : newGroup) {
             addGroup(group);
         }
     }
@@ -56,7 +55,7 @@ public abstract class AbstractRedisOperate<K, V> implements IRedisOperate<K, V>{
      *
      * @return key所在组前缀
      */
-    Object generateGroup() {
+    String generateGroup() {
         return group.generateGroup();
     }
 }

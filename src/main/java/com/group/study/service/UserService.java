@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 与用户有关的业务代码
@@ -28,25 +27,12 @@ public class UserService {
     /**
      * 查询用户信息
      *
-     * @param userId 查询的用户id
+     * @param userId    查询的用户id
      * @return 查询到的用户信息
      */
     public User getUserByUserId(String userId) {
-        return this.getUserByUserId(userId, false);
-    }
-
-    /**
-     * 查询用户信息
-     *
-     * @param userId    查询的用户id
-     * @param isDeleted 是否为删除的对象
-     * @return 查询到的用户信息
-     */
-    public User getUserByUserId(String userId, boolean isDeleted) {
-        System.out.println(userId);
         QueryWrapper<User> qw = new QueryWrapper<>();
-        qw.eq("user_id", userId)
-                .eq("is_deleted", isDeleted);
+        qw.eq("user_id", userId);
         return userMapper.selectOne(qw);
     }
 
@@ -57,20 +43,8 @@ public class UserService {
      * @return 查询到的用户信息
      */
     public User getUserByTelephone(String telephone) {
-        return this.getUserByTelephone(telephone, false);
-    }
-
-    /**
-     * 查询用户信息
-     *
-     * @param telephone 手机号
-     * @param isDeleted 是否为删除对象
-     * @return 查询到的用户信息
-     */
-    public User getUserByTelephone(String telephone, boolean isDeleted) {
         QueryWrapper<User> qw = new QueryWrapper<>();
-        qw.eq("telephone", telephone)
-                .eq("is_deleted", isDeleted);
+        qw.eq("telephone", telephone);
         return userMapper.selectOne(qw);
     }
 
@@ -90,9 +64,7 @@ public class UserService {
      * @return 角色列表
      */
     public List<Role> getAllRole() {
-        QueryWrapper<Role> qw = new QueryWrapper<>();
-        qw.eq("is_deleted", 0);
-        return roleMapper.selectList(qw);
+        return roleMapper.selectList(new QueryWrapper<>());
     }
 
     /**

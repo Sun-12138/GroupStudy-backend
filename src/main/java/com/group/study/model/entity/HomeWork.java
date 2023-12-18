@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Data
 @ToString(exclude={"id"})
 @TableName("sys_class")
-public class Class {
+public class HomeWork {
 
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
@@ -23,29 +23,18 @@ public class Class {
     private String classId;
 
     /**
-     * 班级名
+     * 作业标题
      */
-    private String className;
+    private String workTitle;
 
     /**
-     * 班级创建者
+     * 作业内容
      */
-    private String userId;
+    private String workContent;
 
     /**
-     * 创建时间
+     * 添加时间
      */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 是否删除
-     */
-    private Integer isDeleted;
-
+    private Timestamp createTime;
 
 }

@@ -4,9 +4,11 @@ import cn.hutool.core.text.CharSequenceUtil;
 import com.group.study.common.state.StatusCode;
 import com.group.study.exception.BusinessException;
 import com.group.study.model.entity.User;
-import com.group.study.service.RedisService;
 import com.group.study.service.UserService;
 import com.group.study.utils.JwtUtils;
+import com.group.study.utils.redis.operate.RedisValueOperate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,8 +21,13 @@ public class AccountService {
     @Resource
     private UserService userService;
 
-    @Resource
-    private RedisService redisService;
+    @Autowired
+    @Qualifier("addUserToken")
+    private RedisValueOperate<String> addUserToken;
+
+    @Autowired
+    @Qualifier("getUserToken")
+    private RedisValueOperate<String> getUserToken;
 
     /**
      * 用户登录
@@ -31,13 +38,13 @@ public class AccountService {
      */
     public String login(String telephone, String password) {
         User dbUser = userService.getUserByTelephone(telephone);
-        if (!dbUser.getPassword().equals(password) || dbUser.getIsDeleted()) {
+        if (!dbUser.getPassword().equals(password)) {
             throw new BusinessException(StatusCode.AUTH_INFO_ERROR);
         }
         //账号密码正确 创建token
         String token = JwtUtils.createToken(dbUser.getUserId());
         //将新的token放入redis
-        redisService.addUserToken(dbUser.getUserId(), token);
+        addUserToken.exec(dbUser.getUserId(), token);
         return token;
     }
 
@@ -81,7 +88,7 @@ public class AccountService {
         if (!CharSequenceUtil.isBlank(token) && JwtUtils.verifyToken(token)) {
             //在Redis中查询JWT与用户身份是否正确
             String userId = JwtUtils.getTokenAud(token).get(0);
-            String redisToken = redisService.getUserToken(userId);
+            String redisToken = getUserToken.exec(userId)[0];
             return token.equals(redisToken);
         }
         return false;

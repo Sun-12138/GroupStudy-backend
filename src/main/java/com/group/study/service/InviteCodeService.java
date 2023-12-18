@@ -4,8 +4,8 @@ import cn.hutool.core.util.RandomUtil;
 import com.group.study.common.state.StatusCode;
 import com.group.study.context.UserContextHolder;
 import com.group.study.exception.BusinessException;
-import com.group.study.utils.redis.operate.OperateKV;
 import com.group.study.utils.redis.operate.RedisValueOperate;
+import com.group.study.utils.redis.operate.param.factory.RedisOperateFactory;
 import io.lettuce.core.RedisException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,11 +26,11 @@ public class InviteCodeService {
 
     @Autowired
     @Qualifier("addInviteCode")
-    private RedisValueOperate<String, String> addInviteCode;
+    private RedisValueOperate<String> addInviteCode;
 
     @Autowired
     @Qualifier("getInviteCode")
-    private RedisValueOperate<String, String> getInviteCode;
+    private RedisValueOperate<String> getInviteCode;
 
     /**
      * 创建班级邀请码
@@ -50,7 +50,7 @@ public class InviteCodeService {
         for (int i = 0; i < maxNum; i++) {
             randomInvite = RandomUtil.randomString(8);
             try {
-                addInviteCode.exec(OperateKV.createKV(classId, randomInvite, expires, TimeUnit.SECONDS));
+                addInviteCode.exec(RedisOperateFactory.create(classId, randomInvite, expires, TimeUnit.SECONDS));
             } catch (RedisException e) {
                 if (i == maxNum - 1) {
                     throw new BusinessException(StatusCode.SYSTEM_ERROR, "生成邀请码错误");
@@ -72,7 +72,7 @@ public class InviteCodeService {
     public void joinClassByInviteCode(String classId, String inviteCode) {
         if (!checkInviteCodeEffective(classId, inviteCode)) throw new BusinessException(StatusCode.NO_AUTH_ERROR, "邀请码错误或者过期");
         //判断是否已加入班级
-        if (classService.checkUserIsClassOwnerOrMember(classId)) {
+        if (classService.checkUserIsClassMember(classId)) {
             //当前用户可能为班级所有者或者成员
             throw new BusinessException(StatusCode.OPERATION_ERROR, "你已加入该班级");
         }

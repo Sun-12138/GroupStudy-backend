@@ -26,7 +26,7 @@ public class ClassController {
      * @param className 班级名称
      * @return 成功信息
      */
-    @Access({AccessRole.Teacher})
+    @Access(AccessRole.Teacher)
     @PostMapping("/class/add")
     public BaseResponse<String> createClass(@NotBlank(message = "班级名不能为空") String className) {
         classService.createClass(className);
@@ -34,12 +34,24 @@ public class ClassController {
     }
 
     /**
-     * 获取当前用户所有班级
+     * 获取老师创建的班级
      *
      * @return 班级列表
      */
-    @GetMapping("/class/all")
-    public BaseResponse<List<Class>> getUserClassList() {
-        return ResultUtils.success(classService.getAllClass());
+    @Access(AccessRole.Teacher)
+    @GetMapping("/class/teacher/all")
+    public BaseResponse<List<Class>> getTeacherClassList() {
+        return ResultUtils.success(classService.getTeacherClass());
+    }
+
+    /**
+     * 获取学生所有班级
+     *
+     * @return 加入的班级
+     */
+    @Access(AccessRole.Student)
+    @GetMapping("/class/student/all")
+    public BaseResponse<Class> getStudentClassList() {
+        return ResultUtils.success(classService.getStudentClass());
     }
 }

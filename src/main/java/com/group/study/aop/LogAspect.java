@@ -1,5 +1,7 @@
 package com.group.study.aop;
 
+import com.group.study.context.UserContextHolder;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,9 +12,8 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import java.util.UUID;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * @author EDY
@@ -48,6 +49,8 @@ public class LogAspect {
         stopWatch.stop();
         long totalTimeMillis = stopWatch.getTotalTimeMillis();
         log.info("request end, id: {}, cost: {}ms", requestId, totalTimeMillis);
+        //清除ThreadLocal
+        UserContextHolder.clear();
         return result;
     }
 }

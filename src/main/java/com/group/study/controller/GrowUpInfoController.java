@@ -20,6 +20,11 @@ public class GrowUpInfoController {
     @Resource
     private GrowService growService;
 
+    /**
+     * 添加学生成长信息信息
+     *
+     * @param request 成长信息
+     */
     @Access(AccessRole.Teacher)
     @PostMapping("/add/grow")
     public BaseResponse<String> addStudentGrowUpInfo(@Valid @RequestBody GrowInfoRequest request) {
@@ -27,7 +32,13 @@ public class GrowUpInfoController {
         return ResultUtils.success("成功");
     }
 
-    @Access(AccessRole.Student)
+    /**
+     * 获得所有成长信息列表
+     *
+     * @param classId 班级id
+     * @return 成长信息列表
+     */
+    @Access({AccessRole.Student, AccessRole.Teacher})
     @GetMapping("/grow/all/{classId}")
     public BaseResponse<List<GrowUpInfo>> getAllInfo(@PathVariable String classId) {
         return ResultUtils.success(growService.getUserAllInfo(classId));

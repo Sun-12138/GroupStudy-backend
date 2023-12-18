@@ -1,0 +1,29 @@
+@startuml
+interface IRedisOperate<V> {
+    +V[] exec(AbstractRedisOperateParam<V> kv) //执行Redis操作
+    +V[] execTransact(AbstractRedisOperateParam<V> kv); //执行Redis事务操作
+    +List<V> execOfList(AbstractRedisOperateParam<V> kv) //执行Redis操作
+    +List<V> execTransactOfList(AbstractRedisOperateParam<V> kv) //执行Redis操作
+}
+
+abstract AbstractRedisOperate<V> {
+    RedisKeyGroup group //key所在组
+    RedisTemplate<Object, Object> redisTemplate //Redis操作执行者
+    final IRedisOperateCallBack<V> callBack //Redis操作回调对象
+    +AbstractRedisOperate(RedisTemplate<Object, Object> redisTemplate, IRedisOperateCallBack<V> callBack) //构造方法
+    +void addGroup(String newGroup) //添加key所在组
+    +void addGroup(String... newGroup) //添加key所在组
+    String generateGroup() //构建当前设置的key的所在组
+}
+
+class RedisValueOperate<V> {
+    +RedisValueOperate(RedisTemplate<Object, Object> redisTemplate, RedisValueOperateCallBack<V> callBack) //构造方法
+    +V[] exec(String key) //执行Redis操作
+    +V[] exec(String key, V value) //执行Redis操作
+    +V[] exec(AbstractRedisOperateParam<V> kv //执行Redis操作
+    +V[] execTransact(AbstractRedisOperateParam<V> kv) //执行Redis事务操作
+}
+
+AbstractRedisOperate ...> IRedisOperate
+RedisValueOperate ---> AbstractRedisOperate
+@enduml

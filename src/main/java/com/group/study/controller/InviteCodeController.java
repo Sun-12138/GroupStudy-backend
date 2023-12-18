@@ -20,7 +20,7 @@ public class InviteCodeController {
     /**
      * 创建班级邀请码
      */
-    @Access({AccessRole.Teacher})
+    @Access(AccessRole.Teacher)
     @PostMapping("/class/invite/code")
     public BaseResponse<String> createJoinUrl(@Valid @RequestBody InviteCodeRequest request) {
         //生成班级邀请码
@@ -34,6 +34,7 @@ public class InviteCodeController {
      * @param classId    班级id
      * @param inviteCode 班级邀请码
      */
+    @Access(AccessRole.Student)
     @RequestMapping("/class/join/{classId}/{inviteCode}")
     public BaseResponse<String> joinClass(@PathVariable String classId, @PathVariable String inviteCode) {
         inviteCodeService.joinClassByInviteCode(classId, inviteCode);

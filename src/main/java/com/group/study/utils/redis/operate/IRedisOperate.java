@@ -1,8 +1,10 @@
 package com.group.study.utils.redis.operate;
 
+import com.group.study.utils.redis.operate.param.AbstractRedisOperateParam;
+
 import java.util.List;
 
-public interface IRedisOperate<K, V> {
+public interface IRedisOperate<V> {
 
     /**
      * 执行Redis操作
@@ -10,7 +12,7 @@ public interface IRedisOperate<K, V> {
      * @param kv Redis操作需要的Key-Value
      * @return 如果需要获取数据则进行返回 无需则返回null
      */
-    V[] exec(OperateKV<K, V> kv);
+    V[] exec(AbstractRedisOperateParam<V> kv);
 
     /**
      * 执行Redis事务操作
@@ -18,7 +20,7 @@ public interface IRedisOperate<K, V> {
      * @param kv Redis操作需要的Key-Value
      * @return 如果需要获取数据则进行返回 无需则返回null
      */
-    V[] execTransact(OperateKV<K, V> kv);
+    V[] execTransact(AbstractRedisOperateParam<V> kv);
 
     /**
      * 执行Redis操作
@@ -26,7 +28,7 @@ public interface IRedisOperate<K, V> {
      * @param kv Redis操作需要的Key-Value
      * @return 如果需要获取数据则进行返回 无需则返回null
      */
-    default List<V> execOfList(OperateKV<K, V> kv) {
+    default List<V> execOfList(AbstractRedisOperateParam<V> kv) {
         return List.of(exec(kv));
     }
 
@@ -36,7 +38,7 @@ public interface IRedisOperate<K, V> {
      * @param kv Redis操作需要的Key-Value
      * @return 如果需要获取数据则进行返回 无需则返回null
      */
-    default List<V> execTransactOfList(OperateKV<K, V> kv) {
+    default List<V> execTransactOfList(AbstractRedisOperateParam<V> kv) {
         return List.of(execTransact(kv));
     }
 }

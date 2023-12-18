@@ -1,0 +1,15 @@
+@startuml
+
+interface IRedisOperateCallBack<V> {}
+
+class RedisValueOperateCallBack<V> {
+    -operate(RedisValueOperateParam<V> param, ValueOperations<Object, Object> execute): V[]
+}
+
+class RedisHashOperateCallBack<V> {
+    -operate(RedisHashOperateParam<V> param, HashOperations<Object, Object> execute): V[]
+}
+RedisValueOperateCallBack ....> IRedisOperateCallBack
+RedisHashOperateCallBack ...> IRedisOperateCallBack
+
+@enduml

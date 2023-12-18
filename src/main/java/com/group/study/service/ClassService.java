@@ -72,7 +72,8 @@ public class ClassService {
         String userId = UserContextHolder.getContext().getUserId();
         QueryWrapper<Class> qw = new QueryWrapper<>();
         qw.eq("user_id", userId)
-                .eq("class_name", className);
+                .eq("class_name", className)
+                .eq("is_deleted", 0);
         return classMapper.selectOne(qw);
     }
 
@@ -84,40 +85,36 @@ public class ClassService {
      */
     public Class getClassById(String classId) {
         QueryWrapper<Class> qw = new QueryWrapper<>();
-        qw.eq("class_id", classId);
+        qw.eq("class_id", classId)
+                .eq("is_deleted", 0);
         return classMapper.selectOne(qw);
     }
 
-    public List<Class> getJoinClass() {
-        return classMapper.getAllClass(UserContextHolder.getContext().getUserId());
-    }
-
     /**
-     * 获得创建的班级列表
+     * 获得老师创建的班级列表
      *
-     * @return 当前用户创建的班级列表
+     * @return 班级列表
      */
-    public List<Class> getOwnerClass() {
+    public List<Class> getTeacherClass() {
         //当前用户id
         String userId = UserContextHolder.getContext().getUserId();
         QueryWrapper<Class> qw = new QueryWrapper<>();
-        qw.eq("user_id", userId);
+        qw.eq("user_id", userId)
+                .eq("is_deleted", 0);
         return classMapper.selectList(qw);
     }
 
     /**
-     * 获得当前用户所有班级
+     * 获得学生加入的所有班级
      *
      * @return 当前用户班级列表
      */
-    public List<Class> getAllClass() {
-        List<Class> joinCLass = getJoinClass();
-        joinCLass.addAll(getOwnerClass());
-        return joinCLass;
+    public Class getStudentClass() {
+        return classMapper.getStudentClass(UserContextHolder.getContext().getUserId());
     }
 
     /**
-     * 获得班级的成员
+     * 获得班级的成员id
      *
      * @param classId 班级id
      * @return 成员用户id列表
@@ -174,24 +171,6 @@ public class ClassService {
     }
 
     /**
-     * 检查用户是否为班级的所有者或者成员
-     *
-     * @param classId 班级id
-     * @return true是班级的所有者或者成员 false则相反
-     */
-    public boolean checkUserIsClassOwnerOrMember(String classId) {
-        return this.checkUserIsClassOwner(classId) || this.checkUserIsClassMember(classId);
-    }
-
-//    /**
-//     * 检查userID是否为classId对应班级的成员
-//     */
-//    public boolean checkUserIdIsClassMember(String classId, String userId) {
-//        QueryWrapper<User> qw = new QueryWrapper<>();
-//        qw
-//    }
-
-    /**
      * 分页方式查询成员
      *
      * @param pageNum  页面页号
@@ -199,6 +178,10 @@ public class ClassService {
      * @param classId  班级id
      */
     public IPage<User> getClassMemberPage(int pageNum, int pageSize, String classId) {
+        //检查当前用户是否为班级创建者
+        if (!this.checkUserIsClassOwner(classId)) {
+            throw new BusinessException(StatusCode.NO_AUTH_ERROR);
+        }
         //数据库中的User数据
         return classMapper.getClassMember(new Page<>(pageNum, pageSize), classId);
     }
