@@ -3,9 +3,14 @@ package com.group.study.controller;
 import com.group.study.annotation.Access;
 import com.group.study.common.BaseResponse;
 import com.group.study.common.ResultUtils;
+import com.group.study.model.dto.response.ClassInfoResponse;
 import com.group.study.model.entity.Class;
+import com.group.study.model.entity.User;
 import com.group.study.model.enums.AccessRole;
 import com.group.study.service.ClassService;
+import com.group.study.service.UserService;
+import com.group.study.struct.ClassStructMapper;
+import com.group.study.struct.UserStructMapper;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +24,9 @@ public class ClassController {
 
     @Resource
     private ClassService classService;
+
+    @Resource
+    private UserService userService;
 
     /**
      * 创建班级
@@ -51,7 +59,15 @@ public class ClassController {
      */
     @Access(AccessRole.Student)
     @GetMapping("/class/student/all")
-    public BaseResponse<Class> getStudentClassList() {
-        return ResultUtils.success(classService.getStudentClass());
+    public BaseResponse<ClassInfoResponse> getStudentClassList() {
+        Class classInfo = classService.getStudentClass();
+        if (classInfo == null) {
+            return ResultUtils.success(null);
+        }
+        User teacherInfo = userService.getUserByUserId(classInfo.getUserId());
+        ClassInfoResponse response = ClassStructMapper.MAPPER.from(classInfo);
+        //设置创建者教师信息
+        response.setUser(UserStructMapper.MAPPER.from(teacherInfo));
+        return ResultUtils.success(response);
     }
 }

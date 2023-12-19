@@ -32,6 +32,10 @@ public class InviteCodeService {
     @Qualifier("getInviteCode")
     private RedisValueOperate<String> getInviteCode;
 
+    @Autowired
+    @Qualifier("getInviteCodeTTL")
+    private RedisValueOperate<Long> getInviteCodeTTL;
+
     /**
      * 创建班级邀请码
      *
@@ -82,6 +86,25 @@ public class InviteCodeService {
     }
 
     /**
+     * 通过班级id获取邀请码
+     *
+     * @param classId 班级id
+     * @return 邀请码
+     */
+    public String[] getInviteCodeByClassId(String classId) {
+        return getInviteCode.exec(classId);
+    }
+
+    /**
+     * 获取邀请码的剩余有效期
+     * @param classId 班级id
+     * @return 剩余时间 单位秒
+     */
+    public Long getInviteCodeTTL(String classId) {
+        return getInviteCodeTTL.exec(classId)[0];
+    }
+
+    /**
      * 检查邀请码是否正确
      *
      * @param classId    班级id
@@ -89,7 +112,7 @@ public class InviteCodeService {
      * @return 是否正确
      */
     public boolean checkInviteCodeEffective(String classId, String inviteCode) {
-        String[] code = getInviteCode.exec(classId);
+        String[] code = getInviteCodeByClassId(classId);
         if (code.length == 0) return false;
         return Objects.equals(inviteCode, code[0]);
     }

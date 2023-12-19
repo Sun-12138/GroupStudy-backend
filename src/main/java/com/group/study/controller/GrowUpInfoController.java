@@ -4,6 +4,7 @@ import com.group.study.annotation.Access;
 import com.group.study.common.BaseResponse;
 import com.group.study.common.ResultUtils;
 import com.group.study.model.dto.request.GrowInfoRequest;
+import com.group.study.model.dto.request.GrowInfoStudentRequest;
 import com.group.study.model.entity.GrowUpInfo;
 import com.group.study.model.enums.AccessRole;
 import com.group.study.service.GrowService;
@@ -38,10 +39,16 @@ public class GrowUpInfoController {
      * @param classId 班级id
      * @return 成长信息列表
      */
-    @Access({AccessRole.Student, AccessRole.Teacher})
+    @Access({AccessRole.Student})
     @GetMapping("/grow/all/{classId}")
     public BaseResponse<List<GrowUpInfo>> getAllInfo(@PathVariable String classId) {
         return ResultUtils.success(growService.getUserAllInfo(classId));
+    }
+
+    @Access({AccessRole.Teacher})
+    @PostMapping("/grow/student/info")
+    public BaseResponse<List<GrowUpInfo>> getStudentAllInfo(@Valid @RequestBody GrowInfoStudentRequest request) {
+        return ResultUtils.success(growService.getStudentAllInfo(request.getClassId(), request.getUserId()));
     }
 
 }

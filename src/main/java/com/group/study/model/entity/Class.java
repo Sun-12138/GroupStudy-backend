@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -35,17 +36,17 @@ public class Class {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Timestamp createTime;
 
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private Timestamp updateTime;
 
     /**
      * 是否删除
      */
-    private Integer isDeleted;
+    private Integer isDelete;
 
 
 }

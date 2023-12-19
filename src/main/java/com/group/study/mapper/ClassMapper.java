@@ -17,7 +17,7 @@ public interface ClassMapper extends BaseMapper<Class> {
     /**
      * 获取所有班级成员的user_id
      */
-    @Select("SELECT user_id FROM sys_user_class WHERE class_id=#{classId} AND is_deleted=0")
+    @Select("SELECT user_id FROM sys_user_class WHERE class_id=#{classId} AND is_delete=0")
     List<String> getClassMemberId(String classId);
 
     /**
@@ -34,7 +34,7 @@ public interface ClassMapper extends BaseMapper<Class> {
      *
      * @param userId 用户id
      */
-    @Select("SELECT sys_class.* FROM sys_class, sys_user_class WHERE sys_user_class.user_id = #{userId} AND sys_user_class.class_id = sys_class.class_id AND sys_class.is_deleted=0")
+    @Select("SELECT sys_class.* FROM sys_class, sys_user_class WHERE sys_user_class.user_id = #{userId} AND sys_user_class.class_id = sys_class.class_id AND sys_class.is_delete=0")
     Class getStudentClass(String userId);
 
     /**
@@ -44,6 +44,6 @@ public interface ClassMapper extends BaseMapper<Class> {
      * @param classId 班级id
      * @return 分页查询的班级成员
      */
-    @Select("SELECT usr.user_id, usr.user_name, usr.sex, usr.telephone, usr.create_time, usr.update_time FROM sys_user_class cls, sys_user usr WHERE cls.class_id = #{classId} AND usr.user_id = cls.user_id AND cls.is_deleted=0")
+    @Select("SELECT usr.user_id, usr.user_name, usr.sex, usr.telephone, usr.create_time, usr.update_time FROM sys_user_class cls, sys_user usr WHERE cls.class_id = #{classId} AND usr.user_id = cls.user_id AND cls.is_delete=0")
     IPage<User> getClassMember(Page<User> page, String classId);
 }

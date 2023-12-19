@@ -71,4 +71,16 @@ public class BeanConfig {
         return operate;
     }
 
+    /**
+     * 获取邀请码的剩余有效期
+     */
+    @Bean("getInviteCodeTTL")
+    public RedisValueOperate<Long> getInviteCodeTTL(RedisTemplate<Object, Object> redisTemplate) {
+        RedisValueOperate<Long> operate = new RedisValueOperate<>(redisTemplate, ((param, execute) -> {
+            return new Long[]{redisTemplate.getExpire(param.getKey())};
+        }));
+        operate.addGroup("invite");
+        return operate;
+    }
+
 }

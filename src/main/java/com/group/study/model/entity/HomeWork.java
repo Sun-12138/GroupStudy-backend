@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 
 @Data
 @ToString(exclude={"id"})
-@TableName("sys_class")
+@TableName("sys_user_class_work")
 public class HomeWork {
 
     @Setter(AccessLevel.NONE)

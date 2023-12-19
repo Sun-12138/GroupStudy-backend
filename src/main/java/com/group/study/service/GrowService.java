@@ -44,9 +44,13 @@ public class GrowService {
      */
     public List<GrowUpInfo> getUserAllInfo(String classId) {
         String userId = UserContextHolder.getContext().getUserId();
+        return this.getStudentAllInfo(classId, userId);
+    }
+
+    public List<GrowUpInfo> getStudentAllInfo(String classId, String studentUserId) {
         QueryWrapper<GrowUpInfo> qw = new QueryWrapper<>();
         qw.eq("class_id", classId)
-                .eq("user_id", userId);
+                .eq("user_id", studentUserId);
         return growMapper.selectList(qw);
     }
 }

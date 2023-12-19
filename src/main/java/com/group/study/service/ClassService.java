@@ -73,7 +73,7 @@ public class ClassService {
         QueryWrapper<Class> qw = new QueryWrapper<>();
         qw.eq("user_id", userId)
                 .eq("class_name", className)
-                .eq("is_deleted", 0);
+                .eq("is_delete", 0);
         return classMapper.selectOne(qw);
     }
 
@@ -86,7 +86,7 @@ public class ClassService {
     public Class getClassById(String classId) {
         QueryWrapper<Class> qw = new QueryWrapper<>();
         qw.eq("class_id", classId)
-                .eq("is_deleted", 0);
+                .eq("is_delete", 0);
         return classMapper.selectOne(qw);
     }
 
@@ -100,7 +100,7 @@ public class ClassService {
         String userId = UserContextHolder.getContext().getUserId();
         QueryWrapper<Class> qw = new QueryWrapper<>();
         qw.eq("user_id", userId)
-                .eq("is_deleted", 0);
+                .eq("is_delete", 0);
         return classMapper.selectList(qw);
     }
 

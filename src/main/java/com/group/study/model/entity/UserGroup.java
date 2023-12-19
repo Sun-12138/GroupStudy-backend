@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  */
 @Data
 @ToString(exclude={"id"})
-@TableName("sys_user")
+@TableName("sys_user_class_grow")
 public class UserGroup {
 
     /**

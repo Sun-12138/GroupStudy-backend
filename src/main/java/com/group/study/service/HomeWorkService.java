@@ -42,13 +42,9 @@ public class HomeWorkService {
      * @return 作业列表
      */
     public List<HomeWork> getHomeWorkList(String classId) {
-        //检查是否为班级成员
-        if (!classService.checkUserIsClassMember(classId)) {
-            throw new BusinessException(StatusCode.NO_AUTH_ERROR);
-        }
         QueryWrapper<HomeWork> qw = new QueryWrapper<>();
         qw.eq("class_id", classId)
-                .eq("is_deleted", 0);
+                .eq("is_delete", 0);
         return homeWorkMapper.selectList(qw);
     }
 
